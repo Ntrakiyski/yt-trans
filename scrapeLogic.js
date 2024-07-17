@@ -1,11 +1,15 @@
+// scrapeLogic.js
 const puppeteer = require("puppeteer");
 require("dotenv").config();
 
-
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
+const scrapeLogic = async (req, res) => {
+  const videoUrl = req.query.video;
+  if (!videoUrl) {
+    return res.status(400).json({ error: 'Missing video URL parameter' });
+  }
 
-const scrapeLogic = async (res) => {
   const browser = await puppeteer.launch({
     args: [
       "--disable-setuid-sandbox",
@@ -111,7 +115,6 @@ const scrapeLogic = async (res) => {
 
     res.json(jsonObject); // Return JSON response to the client
 
-  
   } catch (e) {
     console.error(e);
     res.send(`Something went wrong while running Puppeteer: ${e}`);
